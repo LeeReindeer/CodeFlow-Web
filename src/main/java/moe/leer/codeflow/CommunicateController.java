@@ -1,6 +1,8 @@
 package moe.leer.codeflow;
 
-import moe.leer.codeflow.core.CodeFlowCompiler;
+import guru.nidi.graphviz.engine.Format;
+import moe.leer.codeflowcore.CodeFlow;
+import moe.leer.codeflowcore.FlowchartConfig;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
@@ -11,15 +13,40 @@ import org.springframework.stereotype.Controller;
  */
 @Controller
 public class CommunicateController {
-  /**
-   * @param code input code fragment
-   * @return the ast tree message
-   */
-  @MessageMapping("/communicate")
-  @SendTo("/topic/ast")
-  public ASTMessage communicate(String code) {
-    ASTMessage message = new CodeFlowCompiler().parse(code);
-    System.out.println(message);
-    return message;
+
+  private static final CodeFlow codeFlow = CodeFlow.builder()
+      .failFast(true)
+      .strictMode(false)
+      .useNative(true)
+      .workDir("examples")
+      .outDir("tests")
+      .format(Format.PNG)
+      .build();
+
+  static {
+    FlowchartConfig.setFunctionColor("pink");
+    FlowchartConfig.virtualStartNode = true;
+    FlowchartConfig.virtualEndNode = true;
+    FlowchartConfig.mergeSequences = true;
   }
+
+  /**
+   * @param code the source code
+   * @return the DOT language of flowchart
+   */
+  @MessageMapping("/flowchart")
+  @SendTo("/topic/flowchart")
+  public Result<String, String> flowchartDOT(String code) {
+    Result<String, String> result = new Result<>();
+    try {
+      result.data = codeFlow.parse(code).toDOT();
+    } catch (Exception e) {
+      result.data = "";
+      result.error = e.getCause().getMessage();
+    }
+    System.out.println(result);
+    return result;
+  }
+
+
 }

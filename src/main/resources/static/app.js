@@ -1,3 +1,14 @@
+const debounce = (func, delay) => {
+    let debounceTimer
+    return function () {
+        const context = this
+        const args = arguments
+        clearTimeout(debounceTimer)
+        debounceTimer
+            = setTimeout(() => func.apply(context, args), delay)
+    }
+}
+
 var editor;
 $.getScript('//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js', function () {
     $.getScript('//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ext-language_tools.js', function () {
@@ -11,8 +22,16 @@ $.getScript('//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js', function () {
         });
         editor.setShowPrintMargin(false);
         editor.setHighlightActiveLine(false);
+        editor.getSession().on('change', debounce(update, 1000));
     });
 });
+
+var viz = new Viz();
+
+function update() {
+    console.log("sendCode");
+    sendCode();
+}
 
 // Integrating ANTLR JavaScript parsers with ACE editor
 //https://www.zybuluo.com/3013216027/note/346407
@@ -21,7 +40,7 @@ function connect() {
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log("Connected: " + frame);
-        stompClient.subscribe("/topic/ast", function (astMsg) {
+        stompClient.subscribe("/topic/flowchart", function (astMsg) {
             showResult(JSON.parse(astMsg.body));
         });
     });
@@ -36,16 +55,28 @@ function disconnect() {
 
 function sendCode() {
     console.log(editor.getValue());
-    stompClient.send("/app/communicate", {}, editor.getValue());
+    if (editor.getValue() !== "") {
+        stompClient.send("/app/flowchart", {}, editor.getValue());
+    }
 }
 
 function showResult(json) {
     $("#tokens").html("");
     console.log("show result: " + json);
-    json.tokens.forEach(function (t) {
-        // console.log(t);
-        $("#tokens").append("<tr><td>" + t + "</td></tr>");
-    });
 
-    $("#resultPane").last().html("<strong>" + json.ast + "</strong>");
+    if (json.data != null && json.data != "") {
+        $("#resultPane").last().html("");
+        viz.renderImageElement(json.data)
+            .then(function (element) {
+                $("#graphImage").html(element)
+                console.log("element: " + element);
+            })
+            .catch(error => {
+                $("#resultPane").last().html("<strong>" + error + "</strong>");
+                viz = new Viz();
+            });
+    } else {
+        $("#resultPane").last().html("<strong>" + json.error + "</strong>");
+        $("#graphImage").html("")
+    }
 }

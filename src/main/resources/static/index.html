@@ -8,6 +8,8 @@
     <script src="/webjars/jquery/jquery.min.js"></script>
     <script src="/webjars/sockjs-client/sockjs.min.js"></script>
     <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <script src="/webjars/viz.js/viz.js"></script>
+    <script src="/webjars/viz.js/full.render.js"></script>
     <script src="/app.js"></script>
     <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js" type="text/javascript"-->
     <!--            charset="utf-8"></script>-->
@@ -55,34 +57,18 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-4">
-            <div class="editor" id="editor"></div>
+        <div class="col-sm-6">
+            <div class="editor" id="editor" style="background: cornsilk"></div>
         </div>
-        <div class="col-sm-8">
-            <button class="btn btn-info" onclick="sendCode()">Send</button>
+        <div class="col-sm-6">
+<!--            <button class="btn btn-info" onclick="sendCode()">Send</button>-->
             <div id="resultPane">
-                <h3>AST</h3>
-                <p></p>
             </div>
-            <div class="scrollTable">
-                <table class="table ">
-                    <thead>
-                    <tr>
-                        <th>Tokens</th>
-                    </tr>
-                    </thead>
-                    <tbody id="tokens">
-                    </tbody>
-                </table>
+            <div id="graphImage">
             </div>
         </div>
     </div>
 </div>
 
-<!--<script>-->
-<!--    var editor = ace.edit("editor");-->
-<!--    editor.setTheme("ace/theme/github");-->
-<!--    editor.getSession().setMode("ace/mode/java");-->
-<!--</script>-->
 </body>
 </html>

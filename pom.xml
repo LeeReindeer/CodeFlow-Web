@@ -52,6 +52,12 @@
         </dependency>
 
         <dependency>
+            <groupId>moe.leer</groupId>
+            <artifactId>codeflow-core</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>webjars-locator-core</artifactId>
         </dependency>
@@ -74,6 +80,11 @@
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
             <version>3.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>viz.js</artifactId>
+            <version>2.1.2-pre.1</version>
         </dependency>
 <!--        <dependency>-->
 <!--            <groupId>org.webjars</groupId>-->
