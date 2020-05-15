@@ -51,10 +51,12 @@
             </exclusions>
         </dependency>
 
+        //TODO you should run `mvn install -DskipTests` on the codeflow-core project
         <dependency>
             <groupId>moe.leer</groupId>
             <artifactId>codeflow-core</artifactId>
             <version>2.0.0</version>
+            <scope>system</scope>
         </dependency>
 
         <dependency>
@@ -86,11 +88,11 @@
             <artifactId>viz.js</artifactId>
             <version>2.1.2-pre.1</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.webjars</groupId>-->
-<!--            <artifactId>ace</artifactId>-->
-<!--            <version>1.1.3</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.webjars</groupId>-->
+        <!--            <artifactId>ace</artifactId>-->
+        <!--            <version>1.1.3</version>-->
+        <!--        </dependency>-->
     </dependencies>
 
     <build>

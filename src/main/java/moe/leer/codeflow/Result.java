@@ -3,13 +3,15 @@ package moe.leer.codeflow;
 import lombok.Data;
 
 /**
+ * Present a result contains data or error
+ *
  * @author leer
  * Created at 4/29/20 10:35 PM
  */
 @Data
 public class Result<T, E extends String> {
   T data;
-  String error;
+  E error;
 
   public Result() {
   }
@@ -18,7 +20,7 @@ public class Result<T, E extends String> {
     this.data = data;
   }
 
-  public Result(String error) {
+  public Result(E error) {
     this.error = error;
   }
 }

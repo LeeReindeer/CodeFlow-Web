@@ -9,33 +9,32 @@ const debounce = (func, delay) => {
     }
 }
 
-var editor;
-$.getScript('//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js', function () {
-    $.getScript('//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ext-language_tools.js', function () {
-        ace.require("ace/ext/language_tools");
-        editor = ace.edit("editor");
-        editor.getSession().setMode("ace/mode/java");
-        editor.setTheme("ace/theme/github");
-        editor.setOptions({
-            enableBasicAutocompletion: true,
-            enableSnippets: true
-        });
-        editor.setShowPrintMargin(false);
-        editor.setHighlightActiveLine(false);
-        editor.getSession().on('change', debounce(update, 1000));
-    });
-});
-
-var viz = new Viz();
+let editor;
+let viz = new Viz();
 
 function update() {
+    const graphPane = $("#graph-pane");
+    graphPane.css('opacity', '0.4');
     console.log("sendCode");
     sendCode();
 }
 
 // Integrating ANTLR JavaScript parsers with ACE editor
 //https://www.zybuluo.com/3013216027/note/346407
-function connect() {
+function onLoad() {
+    ace.require("ace/ext/language_tools");
+    editor = ace.edit("editor");
+    editor.getSession().setMode("ace/mode/java");
+    editor.setFontSize("18px");
+    editor.setTheme("ace/theme/github");
+    editor.setOptions({
+        enableBasicAutocompletion: true,
+        enableSnippets: true
+    });
+    editor.setShowPrintMargin(false);
+    editor.setHighlightActiveLine(false);
+    editor.getSession().on('change', debounce(update, 1000));
+
     var socket = new SockJS('/codeflow-ws');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
@@ -46,7 +45,7 @@ function connect() {
     });
 }
 
-function disconnect() {
+function onClose() {
     if (stompClient !== null) {
         stompClient.disconnect();
     }
@@ -69,6 +68,8 @@ function showResult(json) {
         viz.renderImageElement(json.data)
             .then(function (element) {
                 $("#graphImage").html(element)
+                $("#graphImage :last-child").addClass("img-fluid")
+                $("#graph-pane").css('opacity', '1');
                 console.log("element: " + element);
             })
             .catch(error => {
