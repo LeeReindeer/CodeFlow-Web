@@ -68,7 +68,11 @@ function showResult(json) {
         viz.renderImageElement(json.data)
             .then(function (element) {
                 $("#graphImage").html(element)
-                $("#graphImage :last-child").addClass("img-fluid")
+                let image = $("#graphImage :last-child")
+                image.addClass("img-fluid")
+                image.css('height', '100%')
+                image.css('width', '100%')
+
                 $("#graph-pane").css('opacity', '1');
                 console.log("element: " + element);
             })
