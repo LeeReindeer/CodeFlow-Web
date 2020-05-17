@@ -18,6 +18,14 @@
         <java.version>13</java.version>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -51,12 +59,17 @@
             </exclusions>
         </dependency>
 
-        //TODO you should run `mvn install -DskipTests` on the codeflow-core project
+<!--        <dependency>-->
+<!--            <groupId>moe.leer</groupId>-->
+<!--            <artifactId>codeflow-core</artifactId>-->
+<!--            <version>2.0.0</version>-->
+<!--            <scope>system</scope>-->
+<!--            <systemPath>/home/leer/.m2/repository/moe/leer/codeflow-core/2.0.0/codeflow-core-2.0.0.jar</systemPath>-->
+<!--        </dependency>-->
         <dependency>
-            <groupId>moe.leer</groupId>
+            <groupId>com.github.LeeReindeer</groupId>
             <artifactId>codeflow-core</artifactId>
-            <version>2.0.0</version>
-            <scope>system</scope>
+            <version>2.0.1</version>
         </dependency>
 
         <dependency>
